@@ -10,6 +10,8 @@ function setCardType(type) {
   const colors = {
     visa: ["#436D99", "#2D57F2"],
     mastercard: ["#DF6F29", "#C69347"],
+    elo: ["#ED2B2B", "#E4D75B"],
+    nubank: ["#E45BC6", "#E45BC6"],
     default: ["black", "gray"],
   }
 
@@ -55,6 +57,16 @@ const cardNumberMask = {
       mask: "0000 0000 0000 0000",
       regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/,
       cardType: "mastercard",
+    },
+    {
+      mask: "0000 0000 0000 0000",
+      regex: /(^3[4-8][1-7]\d|^71\d[0-4])\d{0,12}/,
+      cardType: "elo",
+    },
+    {
+      mask: "0000 0000 0000 0000",
+      regex: /(^9\d{0,3}|^6[2-8]\d{0,2})\d{0,12}/,
+      cardType: "nubank",
     },
     {
       mask: "0000 0000 0000 0000",
