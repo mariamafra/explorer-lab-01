@@ -1,7 +1,6 @@
 import "./css/index.css"
 import IMask from "imask"
 
-// classe -> elemento dentro da classe -> "> g" procura pelo primeiro nivel de g -> pegar o primeiro <g> dentro do elemento anterior -> elemento dentro do g
 const ccBgColor01 = document.querySelector(".cc-bg svg > g g:nth-child(1) path")
 const ccBgColor02 = document.querySelector(".cc-bg svg > g g:nth-child(2) path")
 
@@ -54,7 +53,7 @@ const cardNumberMask = {
     },
     {
       mask: "0000 0000 0000 0000",
-      regex: /(^5[1-5]\d{0,2} | ^22[2-9]\d | ^2[3-7]\d{0,2})\d{0, 12}/,
+      regex: /(^5[1-5]\d{0,2}|^22[2-9]\d|^2[3-7]\d{0,2})\d{0,12}/,
       cardType: "mastercard",
     },
     {
@@ -62,20 +61,59 @@ const cardNumberMask = {
       cardType: "default",
     },
   ],
-  // Essa função ela ocorre a cada entrada o teclado, o parametro appended se encarrega disso
   dispatch: function (appended, dynamicMasked) {
-    // O que esse comando faz é adicionar o novo numero clicado (appended) ao que já tinha antes (dynamicMasked). Caso seja um numero, só concatena, se for um caracter substitui por vazio
     const number = (dynamicMasked.value + appended).replace(/\D/g, "")
-    //dynamicMasked.compiledMasks -> retorna um dos objetos dentro do mask
     const foundMask = dynamicMasked.compiledMasks.find(function (item) {
       return number.match(item.regex)
     })
-
+    console.log(foundMask)
     return foundMask
   },
 }
 const cardNumberMasked = IMask(cardNumber, cardNumberMask)
-//^4\d{0,15}
-//Inicia com o numero 4 seguido de dígitos que a qtd podem ir de 0 a 15
-//(^5[1-5]\d{0,2} | ^22[2-9]\d | ^2[3-7]\d{0,2})\d{0, 12}
-//Inicia com 5, seguide de um numero entre 1 e 5 seguido de dois digitos + 12 dígitos
+
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+  alert("Cartão adicionado!")
+  location.reload()
+})
+
+document.querySelector("form").addEventListener("submit", (event) => {
+  event.preventDefault()
+})
+
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+  ccHolder.innerText =
+    cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
+})
+
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value)
+})
+
+function updateSecurityCode(code) {
+  const ccSecurity = document.querySelector(".cc-security .value")
+  ccSecurity.innerText = code.length === 0 ? "123" : code
+}
+
+cardNumberMasked.on("accept", () => {
+  const cardType = cardNumberMasked.masked.currentMask.cardType
+  setCardType(cardType)
+  updateCardNumber(cardNumberMasked.value)
+})
+
+function updateCardNumber(code) {
+  const ccNumber = document.querySelector(".cc-number")
+  ccNumber.innerText = code.length === 0 ? "1234 5678 9012 3456" : code
+}
+
+expirationDateMasked.on("accept", () => {
+  updateExpirationDate(expirationDateMasked.value)
+})
+
+function updateExpirationDate(code) {
+  const ccExpirationDate = document.querySelector(".cc-expiration .value")
+  ccExpirationDate.innerText = code.length === 0 ? "02/32" : code
+}
